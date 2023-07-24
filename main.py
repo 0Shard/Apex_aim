@@ -101,3 +101,4 @@ listener.stop()
 
 # Release the mouse
 pyautogui.mouseUp()
+cv2.destroyAllWindows()
