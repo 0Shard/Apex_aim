@@ -71,7 +71,7 @@ while running:
             box_center = ((closest_box[0] * w + closest_box[2] * w) / 2, (closest_box[1] * h + closest_box[3] * h) / 2)
 
             # Move the mouse to the center of the bounding box
-            pyautogui.moveTo(list(map(int, box_center)))
+            pyautogui.moveTo(*map(int, box_center))
 
 listener.stop()
 
