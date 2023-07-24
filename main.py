@@ -3,6 +3,8 @@ import pyautogui
 import numpy as np
 from pynput import keyboard
 from scipy.spatial import distance
+import cv2
+import time
 
 # Load the YOLOv8 model
 model = YOLO('apexlegendfinder.pt')
@@ -19,6 +21,10 @@ running = True
 # IoU and confidence threshold
 iou_threshold = 0.65
 conf_threshold = 0.5
+
+# Time settings for FPS calculation
+prev_frame_time = 0
+new_frame_time = 0
 
 
 def on_press(key):
@@ -72,6 +78,24 @@ while running:
 
             # Move the mouse to the center of the bounding box
             pyautogui.moveTo(*map(int, box_center))
+
+            # Draw bounding boxes on the frame
+            for box, _ in target_boxes:
+                box = (box * np.array([w, h, w, h])).astype(int)
+                cv2.rectangle(frame, (box[0], box[1]), (box[2], box[3]), (255, 0, 0), 2)
+
+            # Calculate FPS
+            new_frame_time = time.time()
+            fps = 1 / (new_frame_time - prev_frame_time)
+            prev_frame_time = new_frame_time
+            fps_text = f"FPS: {int(fps)}"
+
+            # Display FPS on the frame
+            cv2.putText(frame, fps_text, (10, h - 20), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 255), 2)
+
+            # Display the frame with bounding boxes
+            cv2.imshow('YOLOv8 Inference', frame)
+            cv2.waitKey(1)  # Refresh the display window every 1 millisecond to show the updated image
 
 listener.stop()
 
