@@ -1,9 +1,7 @@
-import cv2
 from ultralytics import YOLO
 import pyautogui
 import numpy as np
 from pynput import keyboard
-from operator import itemgetter
 from scipy.spatial import distance
 
 # Load the YOLOv8 model
